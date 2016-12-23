@@ -9,8 +9,8 @@
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-
-      google.charts.load('upcoming', { 'packages': ['map'] });
+      var MAPSAPIKEY = "AIzaSyCeutrC_IEPUqBTLOTpbFVDhDxylsARt-4"
+      google.charts.load('upcoming', { 'packages': ['map'], mapsApiKey: MAPSAPIKEY });
       google.charts.setOnLoadCallback(drawMap);
 
 
@@ -25,7 +25,7 @@
         map.draw(data, options);
       }
       function drawMap() {
-        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?gid=0&headers=1&key=AIzaSyCeutrC_IEPUqBTLOTpbFVDhDxylsARt-4'
+        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?gid=0&headers=1'
         var query = new google.visualization.Query(URL);
         query.send(handleQueryResponse);
       };
