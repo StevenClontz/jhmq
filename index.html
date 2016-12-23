@@ -2,7 +2,7 @@
   <head>
     <title>Julia's Historic Marker Quest</title>
     <style>
-      body {margin: 0px; font-family: "Verdana"; font-size: 11pt;}
+      body {margin: 0px; font-family: "Verdana"; font-size: 11pt; overflow: hidden;}
       #map {position: absolute; top:0px; height:100%; width:100%;}
       #about {position: absolute; bottom: 0px; width:100%; text-align: center;}
       #about a {background: white; color: blue; text-decoration: none; border-radius: 5px; padding: 5px;}
@@ -16,6 +16,7 @@
 
       function handleQueryResponse(response) {
         var data = response.getDataTable();
+        console.log(data);
         var map = new google.visualization.Map(document.getElementById('map'));
         var options = {
           showTooltip: true,
@@ -25,7 +26,7 @@
         map.draw(data, options);
       }
       function drawMap() {
-        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?gid=0&headers=1'
+        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?sheet=GoogleCharts&headers=1'
         var query = new google.visualization.Query(URL);
         query.send(handleQueryResponse);
       };
