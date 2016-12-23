@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Julia's Historic Marker Quest</title>
+    <style>
+      body {margin: 0px; font-family: "Verdana"; font-size: 11pt;}
+      #map {position: absolute; top:0px; height:100%; width:100%;}
+      #about {position: absolute; bottom: 0px; width:100%; text-align: center;}
+      #about a {background: white; color: blue; text-decoration: none; border-radius: 5px; padding: 5px;}
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+
+      google.charts.load('upcoming', { 'packages': ['map'] });
+      google.charts.setOnLoadCallback(drawMap);
+
+
+      function handleQueryResponse(response) {
+        var data = response.getDataTable();
+        var map = new google.visualization.Map(document.getElementById('map'));
+        var options = {
+          showTooltip: true,
+          showInfoWindow: true,
+          mapType: 'normal'
+        };
+        map.draw(data, options);
+      }
+      function drawMap() {
+        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?gid=0&headers=1'
+        var query = new google.visualization.Query(URL);
+        query.send(handleQueryResponse);
+      };
+
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="about">
+      <a href="https://github.com/StevenClontz/jhmq">About</a>
+    </div>
+  </body>
+</html>
