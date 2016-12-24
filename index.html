@@ -7,7 +7,10 @@
       #map {position: absolute; top:0px; height:100%; width:100%;}
       #about {position: absolute; bottom: 0px; width:100%; text-align: center;}
       #about a {background: white; color: blue; text-decoration: none; border-radius: 5px; padding: 5px;}
+      .gm-style-iw {text-align: center;}
+      .gm-style-iw img {height: 200px; padding-top: 5px; border-radius: 10px;}
     </style>
+    <base target="_blank">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
       var MAPSAPIKEY = "AIzaSyCeutrC_IEPUqBTLOTpbFVDhDxylsARt-4"
@@ -17,7 +20,6 @@
 
       function handleQueryResponse(response) {
         var data = response.getDataTable();
-        console.log(data);
         var map = new google.visualization.Map(document.getElementById('map'));
         var options = {
           showTooltip: true,
