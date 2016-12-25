@@ -7,7 +7,8 @@
       #map {position: absolute; top:0px; height:100%; width:100%;}
       #about {position: absolute; bottom: 0px; width:100%; text-align: center;}
       #about a {background: white; color: blue; text-decoration: none; border-radius: 5px; padding: 5px;}
-      .gm-style-iw {text-align: center;}
+      .gm-style-iw {text-align: center; color: gray;}
+      .gm-style-iw b, .gm-style-iw time {color:black;}
       .gm-style-iw img {height: 200px; padding-top: 5px; border-radius: 10px;}
     </style>
     <base target="_blank">
@@ -19,17 +20,48 @@
 
 
       function handleQueryResponse(response) {
-        var data = response.getDataTable();
+        if (response.isError()) {
+          document.getElementById('about').children[0].textContent =
+            'Error receiving data: ' +
+            response.getMessage() +
+            ' - ' +
+            response.getDetailedMessage();
+          return;
+        }
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Latitude');
+        data.addColumn('number', 'Longitude');
+        data.addColumn('string', 'Description')
+        var rawDataView = new google.visualization.DataView(response.getDataTable());
+        rawDataView.getViewRows().forEach(function(row) {
+          var latitude = rawDataView.getValue(row,0);
+          var longitude = rawDataView.getValue(row,1);
+          var description = rawDataView.getValue(row,2);
+          var date = rawDataView.getValue(row,3);
+          var imageUrl = rawDataView.getValue(row,4);
+          var infoWindowContent =
+            '<b>' +
+            description +
+            '</b> on <date>' +
+            date.toISOString().split('T')[0] +
+            '</date><br/><img src="' +
+            imageUrl +
+            '">';
+          data.addRow([latitude,longitude,infoWindowContent]);
+        });
+        // data.addRows([
+        //   [33.462151,-86.7920149,'Samford University'],
+        //   [32.6032577,-85.6053386,'First Rosenwald School']
+        // ]);
         var map = new google.visualization.Map(document.getElementById('map'));
         var options = {
-          showTooltip: true,
           showInfoWindow: true,
           mapType: 'normal'
         };
         map.draw(data, options);
       }
       function drawMap() {
-        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?sheet=GoogleCharts&headers=1'
+        var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?sheet=Data&headers=1'
         var query = new google.visualization.Query(URL);
         query.send(handleQueryResponse);
       };
