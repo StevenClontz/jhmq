@@ -9,7 +9,7 @@
       #about a {background: white; color: blue; text-decoration: none; border-radius: 5px; padding: 5px;}
       .gm-style-iw {text-align: center; color: gray;}
       .gm-style-iw b, .gm-style-iw time {color:black;}
-      .gm-style-iw img {height: 200px; padding-top: 5px; border-radius: 10px;}
+      .gm-style-iw img {height: 200px; border-radius: 10px;}
     </style>
     <base target="_blank">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -40,11 +40,11 @@
           var date = rawDataView.getValue(row,3);
           var imageUrl = rawDataView.getValue(row,4);
           var infoWindowContent =
-            '<b>' +
+            '<h3>' +
             description +
-            '</b> on <date>' +
+            '</h3><p>on <date>' +
             date.toISOString().split('T')[0] +
-            '</date><br/><img src="' +
+            '</date></p><img src="' +
             imageUrl +
             '">';
           data.addRow([latitude,longitude,infoWindowContent]);
