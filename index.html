@@ -14,9 +14,19 @@
     <base target="_blank">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-      var MAPSAPIKEY = "AIzaSyCeutrC_IEPUqBTLOTpbFVDhDxylsARt-4"
+      var MAPSAPIKEY = "AIzaSyCeutrC_IEPUqBTLOTpbFVDhDxylsARt-4" // do not steal lol
       google.charts.load('upcoming', { 'packages': ['map'], mapsApiKey: MAPSAPIKEY });
       google.charts.setOnLoadCallback(drawMap);
+
+      function makeThumbnailIfImgur(url) {
+        // is it an imgur jpg?
+        if (url.indexOf('imgur') > 0 && url.slice(-4) === '.jpg') {
+          // chop off '.jpg', add 'l.jpg'
+          return url.slice(0, -4) + 'l.jpg';
+        } else {
+          return url;
+        }
+      }
 
 
       function handleQueryResponse(response) {
@@ -61,7 +71,7 @@
             infoWindowContent += '<p><a href="' +
               imageUrl +
             '"><img src="' +
-              imageUrl +
+              makeThumbnailIfImgur(imageUrl) +
             '"></a></p>';
           }
 
