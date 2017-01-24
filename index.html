@@ -20,6 +20,7 @@
 
 
       function handleQueryResponse(response) {
+
         if (response.isError()) {
           document.getElementById('about').children[0].textContent =
             'Error receiving data: ' +
@@ -33,33 +34,64 @@
         data.addColumn('number', 'Longitude');
         data.addColumn('string', 'Description')
         var rawDataView = new google.visualization.DataView(response.getDataTable());
+
+
         rawDataView.getViewRows().forEach(function(row) {
+
           var latitude = rawDataView.getValue(row,0);
           var longitude = rawDataView.getValue(row,1);
-          var description = rawDataView.getValue(row,2);
-          var date = rawDataView.getValue(row,3);
+          var description = rawDataView.getValue(row,2) || "Unknown Marker";
+          var dateRaw = rawDataView.getValue(row,3);
+          if (dateRaw) {
+            var date = dateRaw.toISOString().split('T')[0]
+          } else {
+            var date = "Unknown Date"
+          }
           var imageUrl = rawDataView.getValue(row,4);
+          var additionalImageUrlsRaw = rawDataView.getValue(row,5);
+
           var infoWindowContent =
             '<h3>' +
             description +
             '</h3><p>on <date>' +
-            date.toISOString().split('T')[0] +
-            '</date></p><img src="' +
-            imageUrl +
-            '">';
+            date +
+            '</date></p>';
+
+          if (imageUrl) {
+            infoWindowContent += '<p><a href="' +
+              imageUrl +
+            '"><img src="' +
+              imageUrl +
+            '"></a></p>';
+          }
+
+          if (additionalImageUrlsRaw) {
+            var additionalImageUrls = additionalImageUrlsRaw.split(" ");
+            infoWindowContent += '<p>More:';
+            for (i=0; i<additionalImageUrls.length; ++i) {
+              infoWindowContent += ' <a href="' +
+                additionalImageUrls[i] +
+                '">[' +
+                (i+1).toString() +
+                ']</a>';
+            }
+            infoWindowContent += ' </p>';
+          }
+
           data.addRow([latitude,longitude,infoWindowContent]);
+
         });
-        // data.addRows([
-        //   [33.462151,-86.7920149,'Samford University'],
-        //   [32.6032577,-85.6053386,'First Rosenwald School']
-        // ]);
+
+
         var map = new google.visualization.Map(document.getElementById('map'));
         var options = {
           showInfoWindow: true,
           mapType: 'normal'
         };
         map.draw(data, options);
+
       }
+
       function drawMap() {
         var URL = 'https://docs.google.com/spreadsheets/d/17POJsIXACyxW5NrUV677niPT563_j-wTXLOTPBFVi_w/gviz/tq?sheet=Data&headers=1'
         var query = new google.visualization.Query(URL);
